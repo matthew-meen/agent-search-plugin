@@ -1,0 +1,3 @@
+searxng-settings.yml
+*.log
+node_modules/
