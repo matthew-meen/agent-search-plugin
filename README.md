@@ -43,10 +43,16 @@ trafilatura is used by `fetch_url` for content extraction. It must be on `PATH` 
 
 ### P3 - Create settings file
 
+Check whether the file already exists before writing - the command below will refuse to overwrite an existing file:
+
 ```bash
 mkdir -p ~/.pi/agent
-SECRET="$(openssl rand -hex 32)"
-cat > ~/.pi/agent/searxng-settings.yml << EOF
+
+if [[ -f ~/.pi/agent/searxng-settings.yml ]]; then
+  echo "Settings file already exists. Edit it manually if needed."
+else
+  SECRET="$(openssl rand -hex 32)"
+  cat > ~/.pi/agent/searxng-settings.yml << EOF
 use_default_settings: true
 
 search:
@@ -65,6 +71,8 @@ engines:
   - name: google news
     disabled: true
 EOF
+  echo "Settings file written."
+fi
 ```
 
 The file is never committed; `searxng-settings.yml` is in `.gitignore`.
